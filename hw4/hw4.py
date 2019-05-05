@@ -60,13 +60,20 @@ def init(points_list, k):
     :param k: number of gaussians. type: integer.
     :return the initial guess of w, mu, sigma. types: array
     """
-    w = np.full(k,1.0/k)
-    mu = np.random.rand(k)
-    sigma = np.random.rand(k)
-    ###########################################################################
-    #                             END OF YOUR CODE                            #
-    ###########################################################################
+    w = np.full(k, 1/k)
+    mu = []
+    sigma = []
+
+    sort = np.sort(points_list)
+    len_to_check = int(len(sort)/k)
     
+    for i in range(k):
+        mu.append(np.mean(sort[(i*len_to_check):((i+1)* len_to_check)]))
+        sigma.append(np.sqrt(np.var(sort[(i*len_to_check):((i* len_to_check)+len_to_check)])))
+                     
+    mu = np.array(mu)
+    sigma = np.array(sigma)
+                     
     return w, mu, sigma
 
 
@@ -107,7 +114,7 @@ def maximization(points_list, ranks):
     """
     K = len(ranks[0]) 
     mu_new = np.zeros(K)
-    sigma_new = np.ones(K)
+    sigma_new = np.zeros(K)
     ###########################################################################
     # TODO: Implement the function. compute w_new, mu_new, sigma_new          #
     ###########################################################################
